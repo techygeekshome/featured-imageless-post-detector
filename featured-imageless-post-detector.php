@@ -7,6 +7,14 @@ Author: TechyGeeksHome
 Author URI: https://techygeekshome.info
 */
 
+// Enqueue styles
+function fipd_enqueue_css() {
+    // Enqueue CSS
+    wp_enqueue_style('fipd-style', plugins_url('css/fipd-styles.css', __FILE__));
+}
+// Add the CSS Styling
+add_action('admin_enqueue_scripts', 'fipd_enqueue_css');
+
 // Hook into admin menu
 add_action('admin_menu', 'fipd_add_menu');
 
@@ -179,8 +187,16 @@ function fipd_display_dashboard_widget() {
     $posts = new WP_Query($args);
 
     // Output the total number of posts without featured images
-    echo '<p>Total posts without featured images: ' . $posts->found_posts . '</p>';
-
+	$count = $posts->found_posts;
+    ?>
+    <div class="fipd-dashboard-widget">
+        <div class="fipd-widget-header">Featured Image Stats</div>
+        <div class="fipd-widget-content">
+            <div class="fipd-count"><?php echo $count; ?></div>
+            <div class="fipd-text">Total posts without featured images</div>
+        </div>
+    </div>
+    <?php
     // Reset post data
     wp_reset_postdata();
 }
