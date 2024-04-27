@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Featured Imageless Post Detector
-Description: Checks for posts without a featured image.
+Description: Checks for posts without a featured image and displays statistics on the Dashboard.
 Version: 1.0
 Author: TechyGeeksHome
 Author URI: https://techygeekshome.info
@@ -48,15 +48,9 @@ function fipd_display_posts_without_featured_image() {
 
     $posts = new WP_Query($args);
 
-    // Get the total number of posts without featured images
-    $total_posts = $posts->found_posts;
-
     // Output the posts without featured images
     echo '<div class="wrap">';
     echo '<h1>Posts without Featured Image</h1>';
-
-    // Output the post count
-    echo '<p>Total posts without featured images: ' . $total_posts . '</p>';
 
     // Output the filter dropdowns
     echo '<form method="get" id="fipd-filter-form">';
@@ -77,7 +71,7 @@ function fipd_display_posts_without_featured_image() {
         'format'  => '',
         'prev_text' => __('&laquo;'),
         'next_text' => __('&raquo;'),
-        'total'   => ceil($total_posts / $per_page),
+        'total'   => ceil($posts->found_posts / $per_page),
         'current' => $paged
     ));
     echo '</div>';
@@ -156,3 +150,37 @@ jQuery(document).ready(function($) {
 <?php
 }
 add_action('admin_footer', 'fipd_filter_posts_with_ajax');
+
+// Add custom dashboard widget
+add_action('wp_dashboard_setup', 'fipd_add_dashboard_widget');
+
+function fipd_add_dashboard_widget() {
+    wp_add_dashboard_widget(
+        'fipd_dashboard_widget', // Widget ID
+        'Posts without Featured Image', // Widget title
+        'fipd_display_dashboard_widget' // Callback function
+    );
+}
+
+// Callback function to display content in the dashboard widget
+function fipd_display_dashboard_widget() {
+    // Define the query to get posts without featured images
+    $args = array(
+        'post_type'      => 'post',
+        'meta_query'     => array(
+            array(
+                'key'     => '_thumbnail_id',
+                'compare' => 'NOT EXISTS'
+            )
+        ),
+        'posts_per_page' => -1, // Get all posts without pagination
+    );
+
+    $posts = new WP_Query($args);
+
+    // Output the total number of posts without featured images
+    echo '<p>Total posts without featured images: ' . $posts->found_posts . '</p>';
+
+    // Reset post data
+    wp_reset_postdata();
+}
