@@ -2,7 +2,7 @@
 /*
 Plugin Name: Featured Imageless Post Detector
 Description: Checks for posts without a featured image and displays statistics on the Dashboard.
-Version: 1.0
+Version: 1.0.0
 Author: TechyGeeksHome
 Author URI: https://techygeekshome.info
 */
@@ -62,6 +62,7 @@ function fipd_display_posts_without_featured_image() {
 
     // Output the filter dropdowns
     echo '<form method="get" id="fipd-filter-form">';
+    echo '<input type="hidden" name="page" value="posts_without_featured_image">';
     echo '<label for="post_status">' . __('Sort by Post Status:', 'text-domain') . '</label>';
     echo '<select name="post_status" id="post_status">';
     foreach ($post_statuses as $status => $label) {
@@ -74,14 +75,14 @@ function fipd_display_posts_without_featured_image() {
     // Output the pagination links
     echo '<div class="tablenav">';
     echo '<div class="tablenav-pages">';
-    echo paginate_links(array(
-        'base'    => add_query_arg('paged', '%#%'),
-        'format'  => '',
-        'prev_text' => __('&laquo;'),
-        'next_text' => __('&raquo;'),
-        'total'   => ceil($posts->found_posts / $per_page),
-        'current' => $paged
-    ));
+ 	echo paginate_links(array(
+    'base'    => add_query_arg('paged', '%#%'),
+    'format'  => '',
+    'prev_text' => __('&laquo;'),
+    'next_text' => __('&raquo;'),
+    'total'   => ceil($posts->found_posts / $per_page),
+    'current' => $paged
+));
     echo '</div>';
     echo '</div>';
 
@@ -95,9 +96,6 @@ function fipd_display_posts_without_featured_image() {
         echo '<th>' . esc_html__('Post Status', 'text-domain') . '</th>';
         echo '<th>' . esc_html__('Post Author', 'text-domain') . '</th>';
         echo '<th>' . esc_html__('Post Date', 'text-domain') . '</th>';
-        echo '<th>' . esc_html__('Post Categories', 'text-domain') . '</th>';
-        echo '<th>' . esc_html__('Post Tags', 'text-domain') . '</th>';
-        echo '<th>' . esc_html__('Post Comments Count', 'text-domain') . '</th>';
         echo '<th>' . esc_html__('Edit', 'text-domain') . '</th>';
         echo '</tr>';
         echo '</thead>';
@@ -105,14 +103,11 @@ function fipd_display_posts_without_featured_image() {
         while ($posts->have_posts()) {
             $posts->the_post();
             echo '<tr>';
-            echo '<td>' . get_the_title() . '</td>';
+            echo '<td>' . esc_html(get_the_title()) . '</td>';
             echo '<td>' . esc_html(get_post_status()) . '</td>';
-            echo '<td>' . get_the_author() . '</td>';
-            echo '<td>' . get_the_date() . '</td>';
-            echo '<td>' . get_the_category_list(', ') . '</td>';
-            echo '<td>' . get_the_tag_list('', ', ', '') . '</td>';
-            echo '<td>' . get_comments_number() . '</td>';
-            echo '<td><a href="' . get_edit_post_link() . '">' . esc_html__('Edit', 'text-domain') . '</a></td>';
+            echo '<td>' . esc_html(get_the_author()) . '</td>';
+            echo '<td>' . esc_html(get_the_date()) . '</td>';
+            echo '<td><a href="' . esc_url(get_edit_post_link()) . '">' . esc_html__('Edit', 'text-domain') . '</a></td>';
             echo '</tr>';
         }
         echo '</tbody>';
@@ -125,39 +120,6 @@ function fipd_display_posts_without_featured_image() {
     echo '</div>';
     wp_reset_postdata();
 }
-
-// Enqueue scripts and styles
-function fipd_enqueue_scripts() {
-    wp_enqueue_script('jquery');
-}
-add_action('admin_enqueue_scripts', 'fipd_enqueue_scripts');
-
-// JavaScript for form submission
-function fipd_filter_posts_with_ajax() {
-?>
-<script type="text/javascript">
-jQuery(document).ready(function($) {
-    $('#fipd-filter-form').submit(function(e) {
-        e.preventDefault(); // Prevent the default form submission
-
-        var form = $(this);
-        var data = form.serialize(); // Serialize form data
-
-        $.ajax({
-            type: form.attr('method'),
-            url: form.attr('action'),
-            data: data,
-            success: function(response) {
-                // Replace the content of the container with the filtered posts
-                $('#fipd-posts-container').html($(response).find('#fipd-posts-container').html());
-            }
-        });
-    });
-});
-</script>
-<?php
-}
-add_action('admin_footer', 'fipd_filter_posts_with_ajax');
 
 // Add custom dashboard widget
 add_action('wp_dashboard_setup', 'fipd_add_dashboard_widget');
@@ -187,13 +149,13 @@ function fipd_display_dashboard_widget() {
     $posts = new WP_Query($args);
 
     // Output the total number of posts without featured images
-	$count = $posts->found_posts;
+    $count = $posts->found_posts;
     ?>
     <div class="fipd-dashboard-widget">
         <div class="fipd-widget-header">Featured Image Stats</div>
         <div class="fipd-widget-content">
-            <div class="fipd-count"><?php echo $count; ?></div>
-            <div class="fipd-text">Total posts without featured images</div>
+            <div class="fipd-count"><?php echo esc_html($count); ?></div>
+            <div class="fipd-text"><?php esc_html_e('Total posts without featured images', 'text-domain'); ?></div>
         </div>
     </div>
     <?php
