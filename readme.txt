@@ -18,11 +18,9 @@ Very simple to use, just install and activate the plugin and an extra option wil
 
 Clicking on the "No Featured Image" option will present you with a table of all the posts that do not have a featured image set. It will show you the Post Title, Post Status, Post Author, Post Date and the option to Edit each post.
 
+You can filter the posts using the Post Status drop-down to show Published, Draft, Private or Any.
+
 You will notice that there is also a Dashboard Widget included which will give you a live count of the number of posts without a featured image. You can remove this by unticking the "Posts without Featured Image" under the Screen Options at the top of the WordPress Dashboard. To re-add it, just tick the box again.
-
-Video Demo
-
-https://www.youtube.com/embed/Xfi8YoAj4eQ 
 
 == Installation ==
 Once you have downloaded and installed the plugin, you should then go ahead and activate it which will add an extra option in your WordPress Admin Menu on the left side under Posts called "No Featured Image". It will also add the Dashboard Widget.
@@ -38,11 +36,9 @@ Q. Can the Dashboard Widget be turned off?
 A. You can remove this by unticking the "Posts without Featured Image" under the Screen Options at the top of the WordPress Dashboard.
 
 == Screenshots ==
-
-1. https://techygeekshome.info/wp-content/uploads/2019/03/LinkGather-Full-Screenshot.png
-2. https://techygeekshome.info/wp-content/uploads/2019/03/LinkGather-Post-Links-Page.png
-3. https://techygeekshome.info/wp-content/uploads/2019/03/LinkGather-wpme-Links-Page.png
-4. https://techygeekshome.info/wp-content/uploads/2019/03/LinkGather-Sub-Menu.png
+1. https://techygeekshome.info/wp-content/uploads/2024/04/Posts-without-Featured-Image-Output.png
+2. https://techygeekshome.info/wp-content/uploads/2024/04/Dashboard-Widget-Featured-Image-Stats.png
+3. https://techygeekshome.info/wp-content/uploads/2024/04/No-Featured-Image-Menu-Option.png
 
 == Changelog ==
 Version 1.0.0 - New release.
