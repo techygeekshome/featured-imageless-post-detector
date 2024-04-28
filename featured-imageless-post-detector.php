@@ -5,7 +5,14 @@ Description: Checks for posts without a featured image and displays statistics o
 Version: 1.0.0
 Author: TechyGeeksHome
 Author URI: https://techygeekshome.info
+License: GPLv3 or later
 */
+
+// Security Checks
+if ( ! defined( 'ABSPATH' ) ) 
+	{
+		die;
+	}
 
 // Enqueue styles
 function fipd_enqueue_css() {
